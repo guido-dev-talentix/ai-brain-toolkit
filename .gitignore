@@ -1,0 +1,30 @@
+# Personal data — NEVER commit
+conversations.json
+memories.json
+projects.json
+users.json
+
+# Vault content
+vault/Chats/
+vault/Claude Code/
+vault/Topics/
+vault/Persoon/
+vault/Home.md
+
+# Sync state
+.sync_state.json
+.sync.log
+.sync.log.tmp
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Obsidian internals (optional — share if you want plugin config)
+vault/.obsidian/workspace.json
+vault/.obsidian/workspace-mobile.json

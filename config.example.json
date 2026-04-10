@@ -1,0 +1,27 @@
+{
+  "vault_dir": "~/Projects/AI brain/AI brain",
+  "conversations_file": "~/Projects/AI brain/conversations.json",
+  "claude_code_dir": "~/.claude/projects",
+  "topic_keywords": {
+    "Engineering": [
+      "api", "backend", "frontend", "react", "next.js", "typescript",
+      "python", "supabase", "database", "deploy", "docker"
+    ],
+    "AI & LLMs": [
+      "ai", "llm", "claude", "gpt", "prompt", "rag", "fine-tun",
+      "machine learning", "embedding", "token"
+    ],
+    "Infrastructure": [
+      "server", "vps", "docker", "dns", "ssh", "deployment",
+      "ci/cd", "monitoring", "nginx"
+    ],
+    "Product": [
+      "roadmap", "mvp", "feature", "user story", "sprint",
+      "milestone", "release", "backlog"
+    ],
+    "Design": [
+      "figma", "ui", "ux", "wireframe", "component", "layout",
+      "responsive", "accessibility"
+    ]
+  }
+}
