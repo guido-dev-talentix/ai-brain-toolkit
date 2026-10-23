@@ -1,130 +1,49 @@
-# AI Brain Toolkit
+# AI Brain
 
-Turn your Claude conversations into a searchable Obsidian knowledge base.
+*Turns your Claude Code sessions into a searchable Obsidian vault that updates every hour. Documentation is in Dutch.*
 
-Automatically syncs both **Claude.ai web conversations** and **Claude Code CLI sessions** into an Obsidian vault with topic classification, tagging, and interlinking.
+Claude onthoudt na een gesprek niks. Met dit pakket wel: alles wat je in Claude Code bespreekt, komt elk uur vanzelf in een map op je Mac terecht. Als je later vraagt "weet je nog hoe we dat deden?", zoekt Claude het daar op.
 
-## How it works
+## Wat je nodig hebt
 
-```
-Claude.ai (conversations.json)  ──┐
-                                   ├──▶  sync_vault.py  ──▶  Obsidian Vault
-Claude Code (~/.claude/projects/) ─┘       │                   ├── Chats/
-                                           │                   ├── Claude Code/
-                                      config.json              ├── Topics/
-                                      (your keywords)          └── Home.md
-```
+- Een Mac met Claude Code (de Claude-app of de terminal)
+- Python 3 (zit op elke Mac met de Xcode-tools; anders eerst `xcode-select --install`)
+- Obsidian (gratis, obsidian.md), om je gesprekken als netwerk te bekijken. Niet verplicht.
 
-**What the sync does:**
-- Parses conversations and creates one Obsidian note per chat
-- Auto-classifies into topics based on configurable keywords
-- Extracts tags and assigns importance (based on message count)
-- Generates Topic pages (Map of Content) that group related chats
-- Tracks sync state so it only processes new conversations
-- Updates a Home.md dashboard with stats
-
-## Setup
-
-### 1. Export your Claude.ai conversations
-
-Go to [claude.ai](https://claude.ai) → Settings → Export data. You'll receive a `conversations.json` file.
-
-### 2. Configure
+## Installeren (5 minuten)
 
 ```bash
-cp config.example.json config.json
+git clone https://github.com/guido-dev-talentix/ai-brain-toolkit.git
+cd ai-brain-toolkit
+bash install.sh
 ```
 
-Edit `config.json`:
+Of open een Claude Code-sessie in de gekloonde map en typ: *Installeer dit AI Brain-pakket met install.sh*.
 
-```json
-{
-  "vault_dir": "~/path/to/your/obsidian/vault",
-  "conversations_file": "~/path/to/conversations.json",
-  "claude_code_dir": "~/.claude/projects",
-  "topic_keywords": {
-    "Your Topic": ["keyword1", "keyword2", "keyword3"],
-    "Another Topic": ["keyword4", "keyword5"]
-  }
-}
-```
+Daarna:
 
-- **vault_dir**: Where your Obsidian vault lives (or where to create it)
-- **conversations_file**: Path to your exported `conversations.json`
-- **claude_code_dir**: Where Claude Code stores sessions (default: `~/.claude/projects`)
-- **topic_keywords**: Your own topics with keywords for auto-classification
+1. Open in Obsidian de map `~/AI brain/Vault` ("Open folder as vault").
+2. Start een Claude Code-sessie in de map `~/AI brain` en typ `start onboarding`. Claude stelt je een paar vragen en deelt je gesprekken in onderwerpen in die bij jou passen.
 
-### 3. Run
+## Wat er gebeurt
+
+- Er komt een map `~/AI brain` met daarin je vault en het sync-script. De gekloonde map heb je daarna alleen nog nodig om bij te werken.
+- Elk uur wordt elke Claude Code-sessie opgeslagen: een korte notitie (`Claude Code/`) plus de volledige tekst (`Transcripten/`). Sessies die doorlopen worden bijgewerkt. De transcripten blijven staan, ook als Claude Code zijn eigen logs na 30 dagen wist.
+- Claude krijgt in `~/.claude/CLAUDE.md` de instructie om daar te zoeken als je naar een eerder gesprek verwijst. Het installatiescript voegt dat blok toe en maakt eerst een backup; de rest van je CLAUDE.md blijft staan. Staat het blok er al (tussen `AI-BRAIN:START` en `AI-BRAIN:END`), dan slaat het die stap over.
+
+## Goed om te weten
+
+- Alles blijft op je eigen Mac. Er gaat niets naar een server.
+- Cloud-sessies (die niet op je Mac draaien) komen er niet in.
+- Gesprekken uit claude.ai (de gewone chat) kun je toevoegen via een data-export: claude.ai → Settings → Privacy → Export data, en zet `conversations.json` uit de zip in `~/AI brain`. De volgende sync neemt ze mee.
+- Sync met de hand draaien: `bash ~/AI\ brain/scripts/sync_and_notify.sh` (log in `scripts/.sync.log`).
+- Stoppen kan met `bash ~/AI\ brain/uninstall.sh`. Je gesprekken blijven dan bewaard.
+- Andere locatie: `bash install.sh "/ander/pad"`. Niet in Documenten, Bureaublad of Downloads: daar blokkeert macOS de automatische sync.
+
+## Bijwerken
 
 ```bash
-# Sync everything
-python3 scripts/sync_vault.py
-
-# Only Claude.ai web conversations
-python3 scripts/sync_vault.py --web-only
-
-# Only Claude Code sessions
-python3 scripts/sync_vault.py --code-only
-
-# Rebuild topic pages without syncing
-python3 scripts/sync_vault.py --rebuild-topics
-
-# Use a specific config file
-python3 scripts/sync_vault.py --config /path/to/config.json
+cd ai-brain-toolkit && git pull && bash install.sh
 ```
 
-### 4. Open in Obsidian
-
-Open the vault directory in Obsidian. You'll see:
-- **Chats/** — Claude.ai web conversations
-- **Claude Code/** — CLI sessions grouped by project
-- **Topics/** — Auto-generated topic hubs (Map of Content)
-- **Home.md** — Dashboard with stats
-
-Use Obsidian's graph view to explore connections between conversations.
-
-## Automate with cron
-
-```bash
-chmod +x scripts/sync_and_notify.sh
-
-# Every 2 hours
-crontab -e
-0 */2 * * * /path/to/ai-brain-toolkit/scripts/sync_and_notify.sh
-```
-
-## Memory consolidation (dream agent)
-
-`scripts/dream.md` contains a system prompt for a "memory consolidation agent". Use it with Claude Code to enrich your vault:
-
-```bash
-# In your vault directory, paste the dream.md prompt to Claude Code
-# It will scan weak pages, improve tags, add links between related chats
-```
-
-## Requirements
-
-- Python 3.8+
-- No external dependencies (stdlib only)
-- Obsidian (free) for viewing
-
-## File structure
-
-```
-ai-brain-toolkit/
-├── config.example.json      # Template config — copy to config.json
-├── scripts/
-│   ├── sync_vault.py        # Main sync engine
-│   ├── sync_and_notify.sh   # Cron wrapper
-│   └── dream.md             # Memory consolidation agent prompt
-└── vault/
-    └── .obsidian/            # Recommended Obsidian plugin config
-```
-
-## Privacy
-
-This toolkit processes conversations **locally only**. No data is sent anywhere. Your `conversations.json` and vault content should never be committed to git — the `.gitignore` excludes them by default.
-
-## License
-
-MIT
+Je vault en je instellingen (`scripts/config.json`) blijven staan. De scripts en `uninstall.sh` worden vervangen en de uurlijkse sync wordt opnieuw aangemeld. Het AI Brain-blok in je CLAUDE.md wordt niet bijgewerkt: wil je de nieuwste tekst, haal het blok dan eerst weg en draai `install.sh` opnieuw.
