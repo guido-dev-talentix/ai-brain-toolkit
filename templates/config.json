@@ -1,0 +1,36 @@
+{
+  "user_name": "",
+  "vault_dir": "Vault",
+  "conversations_file": "conversations.json",
+  "default_code_topic": "Overig",
+  "topics": {
+    "Werk": {
+      "description": "Werk, collega's, klanten en projecten.",
+      "keywords": ["werk", "collega", "klant", "project", "vergadering", "meeting", "deadline", "manager", "presentatie"]
+    },
+    "AI & Tech": {
+      "description": "Claude, AI-tools, apps en techniek.",
+      "keywords": ["claude", "chatgpt", "prompt", "app", "website", "code", "python", "excel", "automatiser"]
+    },
+    "Geld & Administratie": {
+      "description": "Financiën, belasting, facturen, verzekeringen en papierwerk.",
+      "keywords": ["belasting", "factuur", "budget", "geld", "verzekering", "hypotheek", "huur", "abonnement", "bank"]
+    },
+    "Gezondheid & Sport": {
+      "description": "Sport, voeding, slaap en gezondheid.",
+      "keywords": ["sport", "training", "hardlopen", "gym", "voeding", "recept", "slaap", "gezond", "fysio"]
+    },
+    "Reizen": {
+      "description": "Vakanties, reisplanning en uitjes.",
+      "keywords": ["reis", "vakantie", "vlucht", "hotel", "route", "trip", "airbnb", "weekend weg"]
+    },
+    "Leren & Studie": {
+      "description": "Cursussen, studie, boeken en dingen uitzoeken.",
+      "keywords": ["cursus", "studie", "leren", "boek", "uitleg", "samenvatting", "tentamen", "scriptie"]
+    },
+    "Persoonlijk": {
+      "description": "Persoonlijke onderwerpen, familie, vrienden en huis.",
+      "keywords": ["vriend", "familie", "verjaardag", "cadeau", "huis", "verhuizen", "persoonlijk", "privé"]
+    }
+  }
+}
